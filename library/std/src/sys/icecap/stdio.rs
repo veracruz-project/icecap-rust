@@ -6,7 +6,7 @@ pub struct Stdout;
 pub struct Stderr;
 
 impl Stdin {
-    pub fn new() -> io::Result<Self> {
+    pub fn new() -> Self {
         unsupported!()
     }
 }
@@ -18,8 +18,8 @@ impl io::Read for Stdin {
 }
 
 impl Stdout {
-    pub fn new() -> io::Result<Self> {
-        Ok(Self)
+    pub fn new() -> Self {
+        Self
     }
 }
 
@@ -35,8 +35,8 @@ impl io::Write for Stdout {
 }
 
 impl Stderr {
-    pub fn new() -> io::Result<Self> {
-        Ok(Self)
+    pub fn new() -> Self {
+        Self
     }
 }
 
@@ -58,5 +58,5 @@ pub fn is_ebadf(_err: &io::Error) -> bool {
 }
 
 pub fn panic_output() -> Option<impl io::Write> {
-    Stderr::new().ok()
+    Some(Stderr::new())
 }
