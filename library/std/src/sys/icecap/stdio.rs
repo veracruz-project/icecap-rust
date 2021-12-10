@@ -1,24 +1,24 @@
 use crate::io;
-use super::icecap_impl::{Void, write_to_fd};
+use super::icecap_impl::write_to_fd;
 
-pub struct Stdin(Void);
+pub struct Stdin;
 pub struct Stdout;
 pub struct Stderr;
 
 impl Stdin {
-    pub fn new() -> Self {
-        unsupported!()
+    pub const fn new() -> Self {
+        Self
     }
 }
 
 impl io::Read for Stdin {
     fn read(&mut self, _data: &mut [u8]) -> io::Result<usize> {
-        self.0.void()
+        Ok(0)
     }
 }
 
 impl Stdout {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self
     }
 }
@@ -35,7 +35,7 @@ impl io::Write for Stdout {
 }
 
 impl Stderr {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self
     }
 }

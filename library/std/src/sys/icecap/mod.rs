@@ -1,8 +1,5 @@
 #![allow(missing_docs)]
 
-use crate::os::raw::c_char;
-use crate::io::ErrorKind;
-
 #[macro_use]
 mod impl_local;
 use impl_local as icecap_impl;
@@ -15,7 +12,6 @@ pub mod args;
 pub mod cmath;
 pub mod condvar;
 pub mod env;
-pub mod fast_thread_local;
 #[path = "../unsupported/fs.rs"]
 pub mod fs;
 #[path = "../unsupported/io.rs"]
@@ -35,13 +31,15 @@ pub mod pipe;
 #[path = "../unsupported/process.rs"]
 pub mod process;
 pub mod rwlock;
-pub mod stack_overflow;
 pub mod stdio;
 pub mod thread;
-pub mod thread_local;
+pub mod thread_local_dtor;
+#[path = "../unsupported/thread_local_key.rs"]
+pub mod thread_local_key;
 pub mod time;
 
 #[path = "../unsupported/common.rs"]
+#[allow(dead_code)] // to stop warning about unused abort_internal
 pub mod unsupported_common;
 
 pub use unsupported_common::{
@@ -56,6 +54,6 @@ pub use unsupported_common::{
 //     abort_internal();
 // }
 
-pub unsafe fn abort_internal() -> ! {
-    icecap_impl::abort()
+pub fn abort_internal() -> ! {
+    unsafe { icecap_impl::abort() }
 }

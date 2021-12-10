@@ -4,6 +4,8 @@ use super::icecap_impl as imp;
 
 pub struct Condvar(imp::Condvar);
 
+pub type MovableCondvar = Condvar;
+
 impl Condvar {
     pub const fn new() -> Condvar {
         Condvar(imp::Condvar::new())

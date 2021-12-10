@@ -2,7 +2,9 @@
 pub enum Void {}
 
 impl Void {
+    /*
     pub fn void<T>(&self) -> T {
         match *self {}
     }
+     */
 }

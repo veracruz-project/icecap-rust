@@ -2,6 +2,8 @@ use super::icecap_impl as imp;
 
 pub struct RWLock(imp::RWLock);
 
+pub type MovableRWLock = RWLock;
+
 unsafe impl Send for RWLock {}
 unsafe impl Sync for RWLock {}
 

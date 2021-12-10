@@ -1,4 +1,5 @@
-use core::sync::atomic::{AtomicBool, AtomicUsize, Ordering, spin_loop_hint};
+use core::sync::atomic::{AtomicBool, /*AtomicUsize,*/ Ordering};
+use crate::hint;
 
 // TODO panic on contention for debugging?
 
@@ -16,10 +17,10 @@ impl Mutex {
     #[inline]
     #[allow(unreachable_code)]
     pub fn lock(&self) {
-        while self.0.compare_and_swap(false, true, Ordering::Acquire) {
+        while !self.0.compare_exchange(false, true, Ordering::Acquire, Ordering::Acquire).is_ok() {
             panic!("mutex contention");
             while self.0.load(Ordering::Relaxed) {
-                spin_loop_hint();
+                hint::spin_loop();
             }
         }
     }
@@ -31,7 +32,7 @@ impl Mutex {
 
     #[inline]
     pub fn try_lock(&self) -> bool {
-        !self.0.compare_and_swap(false, true, Ordering::Acquire)
+        self.0.compare_exchange(false, true, Ordering::Acquire, Ordering::Acquire).is_ok()
     }
 
     #[inline]
@@ -39,24 +40,26 @@ impl Mutex {
     }
 }
 
+/*
 fn get_tid() -> usize {
     let mut reg;
     unsafe {
-        llvm_asm!("mrs %0, tpidr_el0" : "=r"(reg))
+        asm!("mrs {}, tpidr_el0", out(reg) reg);
     }
     reg
 }
+ */
 
 pub struct ReentrantMutex {
-    holder: AtomicUsize,
-    depth: i32,
+    //holder: AtomicUsize,
+    //depth: i32,
 }
 
 impl ReentrantMutex {
     pub const fn uninitialized() -> Self {
         Self {
-            holder: AtomicUsize::new(0),
-            depth: 0,
+            //holder: AtomicUsize::new(0),
+            //depth: 0,
         }
     }
 
@@ -68,10 +71,10 @@ impl ReentrantMutex {
     #[allow(unreachable_code)]
     pub fn lock(&self) {
         // let tid = get_tid();
-        // while self.0.compare_and_swap(false, true, Ordering::Acquire) {
+        // while !self.0.compare_and_swap(false, true, Ordering::Acquire, Ordering::Acquire).is_ok() {
         //     panic!("mutex contention");
         //     while self.0.load(Ordering::Relaxed) {
-        //         spin_loop_hint();
+        //         hint::spin_loop();
         //     }
         // }
     }
@@ -83,7 +86,7 @@ impl ReentrantMutex {
 
     #[inline]
     pub fn try_lock(&self) -> bool {
-        // !self.0.compare_and_swap(false, true, Ordering::Acquire)
+        // self.0.compare_and_swap(false, true, Ordering::Acquire, Ordering::Acquire).is_ok()
         true
     }
 

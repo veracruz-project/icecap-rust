@@ -3,7 +3,9 @@
 use crate::ffi::CStr;
 use crate::fmt;
 use crate::io;
+use crate::num::NonZeroUsize;
 use crate::time::Duration;
+use super::unsupported;
 
 pub struct Tid;
 
@@ -80,6 +82,10 @@ impl Thread {
         println!("thread.into_id()");
         Tid
     }
+}
+
+pub fn available_concurrency() -> io::Result<NonZeroUsize> {
+    unsupported()
 }
 
 pub mod guard {

@@ -2,6 +2,8 @@ use super::icecap_impl as imp;
 
 pub struct Mutex(imp::Mutex);
 
+pub type MovableMutex = Mutex;
+
 unsafe impl Send for Mutex {}
 unsafe impl Sync for Mutex {}
 

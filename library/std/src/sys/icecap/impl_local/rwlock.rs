@@ -1,4 +1,5 @@
-use core::sync::atomic::{spin_loop_hint, AtomicUsize, Ordering};
+use core::sync::atomic::{AtomicUsize, Ordering};
+use crate::hint;
 
 const READER: usize = 1 << 1;
 const WRITER: usize = 1 << 0;
@@ -15,7 +16,7 @@ impl RWLock {
     pub fn read(&self) {
         while !self.try_read() {
             panic!("rwlock read contention");
-            spin_loop_hint()
+            hint::spin_loop()
         }
     }
 
@@ -35,7 +36,7 @@ impl RWLock {
     pub fn write(&self) {
         while !self.try_write_internal(false) {
             panic!("rwlock write contention");
-            spin_loop_hint()
+            hint::spin_loop()
         }
     }
 
