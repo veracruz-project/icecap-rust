@@ -14,6 +14,7 @@ impl RWLock {
     #[inline]
     #[allow(unreachable_code)]
     pub fn read(&self) {
+        return; //xx
         while !self.try_read() {
             panic!("rwlock read contention");
             hint::spin_loop()
@@ -34,6 +35,7 @@ impl RWLock {
     #[inline]
     #[allow(unreachable_code)]
     pub fn write(&self) {
+        return; //xx
         while !self.try_write_internal(false) {
             panic!("rwlock write contention");
             hint::spin_loop()
