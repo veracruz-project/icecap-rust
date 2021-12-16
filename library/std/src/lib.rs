@@ -589,3 +589,8 @@ mod sealed {
     #[unstable(feature = "sealed", issue = "none")]
     pub trait Sealed {}
 }
+
+// HACK
+#[cfg(target_os = "icecap")]
+#[stable(feature = "rust1", since = "1.0.0")]
+pub use sys::icecap_impl_pub as icecap_impl;

@@ -41,7 +41,7 @@ pub fn hashmap_random_keys() -> (u64, u64) {
 
 pub unsafe fn strlen(mut s: *const c_char) -> usize {
     // SAFETY: The caller must guarantee `s` points to a valid 0-terminated string.
-    unsafe {
+    {
         let mut n = 0;
         while *s != 0 {
             n += 1;
