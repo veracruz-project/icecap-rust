@@ -48,7 +48,6 @@ hermit-abi = { version = "0.1.19", features = ['rustc-dep-of-std'] }
 wasi = { version = "0.9.0", features = ['rustc-dep-of-std'], default-features = false }
 
 [target.'cfg(target_os = "icecap")'.dependencies]
-dlmalloc = { version = "=0.1.3", features = ['rustc-dep-of-std'] }
 icecap-std-impl = { version = "*", features = ['rustc-dep-of-std'] }
 
 [features]
